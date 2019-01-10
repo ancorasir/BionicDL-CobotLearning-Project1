@@ -1,0 +1,1467 @@
+<sdf version='1.6'>
+  <world name='default'>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.5 -1</direction>
+    </light>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+    </model>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='robot'>
+      <link name='camera_link'>
+        <pose frame=''>0.6 0 0.8 0 1.57 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.2</mass>
+          <inertia>
+            <ixx>0.00058083</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>3.0833e-05</iyy>
+            <iyz>0</iyz>
+            <izz>0.00059083</izz>
+          </inertia>
+        </inertial>
+        <collision name='camera_link_collision'>
+          <pose frame=''>-0.016 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.036 0.18 0.04</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='camera_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/models/asus_xtion.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <sensor name='camera' type='depth'>
+          <always_on>1</always_on>
+          <visualize>0</visualize>
+          <update_rate>15</update_rate>
+          <camera name='front'>
+            <horizontal_fov>1.5</horizontal_fov>
+            <image>
+              <format>B8G8R8</format>
+              <width>1024</width>
+              <height>576</height>
+            </image>
+            <clip>
+              <near>0.01</near>
+              <far>9</far>
+            </clip>
+          </camera>
+          <plugin name='camera_controller' filename='libgazebo_ros_openni_kinect.so'>
+            <baseline>0.1</baseline>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>15.0</updateRate>
+            <cameraName>camera</cameraName>
+            <imageTopicName>/camera/rgb/image_raw</imageTopicName>
+            <cameraInfoTopicName>/camera/rgb/camera_info</cameraInfoTopicName>
+            <depthImageTopicName>/camera/depth_registered/image_raw</depthImageTopicName>
+            <depthImageCameraInfoTopicName>/camera/depth_registered/camera_info</depthImageCameraInfoTopicName>
+            <pointCloudTopicName>/camera/depth_registered/points</pointCloudTopicName>
+            <frameName>camera_rgb_optical_frame</frameName>
+            <pointCloudCutoff>0.5</pointCloudCutoff>
+            <pointCloudCutoffMax>4.5</pointCloudCutoffMax>
+            <CxPrime>0</CxPrime>
+            <Cx>0</Cx>
+            <Cy>0</Cy>
+            <focalLength>0</focalLength>
+            <hackBaseline>0</hackBaseline>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose frame=''>0 0.022 0 0 -0 0</pose>
+        </sensor>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='camera_link_joint' type='revolute'>
+        <child>camera_link</child>
+        <parent>world</parent>
+        <axis>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+          <xyz>0 0 1</xyz>
+        </axis>
+      </joint>
+      <link name='panda_link0'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>3</mass>
+          <inertia>
+            <ixx>0.00712225</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00712225</iyy>
+            <iyz>0</iyz>
+            <izz>0.0054</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link0_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link0.stl</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='panda_link0_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link0.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='panda_joint_world' type='revolute'>
+        <child>panda_link0</child>
+        <parent>world</parent>
+        <axis>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+          </limit>
+          <dynamics>
+            <damping>0</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+          <xyz>0 0 1</xyz>
+        </axis>
+      </joint>
+      <link name='panda_link1'>
+        <pose frame=''>0 0 0.333 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>3</mass>
+          <inertia>
+            <ixx>0.0127</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0127</iyy>
+            <iyz>0</iyz>
+            <izz>0.0054</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link1_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link1.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_link1_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link1.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_joint1' type='revolute'>
+        <child>panda_link1</child>
+        <parent>panda_link0</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-2.8973</lower>
+            <upper>2.8973</upper>
+            <effort>87</effort>
+            <velocity>2.175</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_link2'>
+        <pose frame=''>0 0 0.333 -1.5708 0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>3</mass>
+          <inertia>
+            <ixx>0.027664</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.027664</iyy>
+            <iyz>0</iyz>
+            <izz>0.0054</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link2_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link2.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_link2_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link2.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_joint2' type='revolute'>
+        <child>panda_link2</child>
+        <parent>panda_link1</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1.7628</lower>
+            <upper>1.7628</upper>
+            <effort>87</effort>
+            <velocity>2.175</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_link3'>
+        <pose frame=''>0 -0 0.649 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.00293437</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00293437</iyy>
+            <iyz>0</iyz>
+            <izz>0.0036</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link3_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link3.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_link3_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link3.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_joint3' type='revolute'>
+        <child>panda_link3</child>
+        <parent>panda_link2</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-2.8973</lower>
+            <upper>2.8973</upper>
+            <effort>87</effort>
+            <velocity>2.175</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_link4'>
+        <pose frame=''>0.0825 -0 0.649 1.5708 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.00293437</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00293437</iyy>
+            <iyz>0</iyz>
+            <izz>0.0036</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link4_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link4.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_link4_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link4.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_joint4' type='revolute'>
+        <child>panda_link4</child>
+        <parent>panda_link3</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-3.0718</lower>
+            <upper>-0.0698</upper>
+            <effort>87</effort>
+            <velocity>2.175</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_link5'>
+        <pose frame=''>-0 0 1.033 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.026376</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.026376</iyy>
+            <iyz>0</iyz>
+            <izz>0.0036</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link5_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link5.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_link5_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link5.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_joint5' type='revolute'>
+        <child>panda_link5</child>
+        <parent>panda_link4</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-2.8973</lower>
+            <upper>2.8973</upper>
+            <effort>12</effort>
+            <velocity>2.61</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_link6'>
+        <pose frame=''>-0 0 1.033 1.5708 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.00346667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00346667</iyy>
+            <iyz>0</iyz>
+            <izz>0.0036</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link6_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link6.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_link6_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link6.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_joint6' type='revolute'>
+        <child>panda_link6</child>
+        <parent>panda_link5</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-0.0175</lower>
+            <upper>3.7525</upper>
+            <effort>12</effort>
+            <velocity>2.61</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_link7'>
+        <pose frame=''>0.088 0 1.033 3.14159 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0.009727 0 -0 0</pose>
+          <mass>1.1</mass>
+          <inertia>
+            <ixx>0.00387415</ixx>
+            <ixy>-0.0009</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00387415</iyy>
+            <iyz>0</iyz>
+            <izz>0.002</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_link7_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/link7.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='panda_link7_fixed_joint_lump__panda_hand_collision_1'>
+          <pose frame=''>0 0 0.107 0 0 -0.785398</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/hand.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.2</mu>
+                <mu2>0.2</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_link7_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/link7.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='panda_link7_fixed_joint_lump__panda_hand_visual_1'>
+          <pose frame=''>0 0 0.107 0 0 -0.785398</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/hand.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay/>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_joint7' type='revolute'>
+        <child>panda_link7</child>
+        <parent>panda_link6</parent>
+        <axis>
+          <xyz>0 0 -1</xyz>
+          <limit>
+            <lower>-2.8973</lower>
+            <upper>2.8973</upper>
+            <effort>12</effort>
+            <velocity>2.61</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_leftfinger'>
+        <pose frame=''>0.088 -0 0.8676 3.14159 -0 0.785398</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.002</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0002</iyy>
+            <iyz>0</iyz>
+            <izz>0.0002</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_leftfinger_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/finger.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_leftfinger_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/finger.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_finger_joint1' type='prismatic'>
+        <child>panda_leftfinger</child>
+        <parent>panda_link7</parent>
+        <axis>
+          <xyz>0.707107 -0.707107 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0.04</upper>
+            <effort>20</effort>
+            <velocity>0.2</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='panda_rightfinger'>
+        <pose frame=''>0.088 -0 0.8676 3.14159 -0 0.785398</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.002</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0002</iyy>
+            <iyz>0</iyz>
+            <izz>0.0002</izz>
+          </inertia>
+        </inertial>
+        <collision name='panda_rightfinger_collision'>
+          <pose frame=''>0 0 0 0 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/collision/finger.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>1</kd>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>30</mu>
+                <mu2>30</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='panda_rightfinger_visual'>
+          <pose frame=''>0 0 0 0 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/bionicdl/catkin_ws/src/franka_ros/franka_description/meshes/visual/finger.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>0</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='panda_finger_joint2' type='prismatic'>
+        <child>panda_rightfinger</child>
+        <parent>panda_link7</parent>
+        <axis>
+          <xyz>-0.707107 0.707107 -0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0.04</upper>
+            <effort>20</effort>
+            <velocity>0.2</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <plugin name='gazebo_ros_control' filename='libgazebo_ros_control.so'>
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        <robotNamespace>/</robotNamespace>
+      </plugin>
+      <static>0</static>
+      <plugin name='gazebo_grasp_fix' filename='libgazebo_grasp_fix.so'>
+        <arm>
+          <arm_name>panda_arm</arm_name>
+          <palm_link>panda_link7</palm_link>
+          <gripper_link>panda_leftfinger</gripper_link>
+          <gripper_link>panda_rightfinger</gripper_link>
+        </arm>
+        <forces_angle_tolerance>100</forces_angle_tolerance>
+        <update_rate>4</update_rate>
+        <grip_count_threshold>4</grip_count_threshold>
+        <max_grip_count>8</max_grip_count>
+        <release_tolerance>0.003</release_tolerance>
+        <disable_collisions_on_attach>false</disable_collisions_on_attach>
+        <contact_topic>__default_topic__</contact_topic>
+        <robotNamespace>/</robotNamespace>
+      </plugin>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+    </model>
+    <model name='dropbox'>
+      <link name='link_0'>
+        <pose frame=''>0 -0 0 0 0 -1.56873</pose>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>model://dropbox/meshes/dropbox.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <lighting>1</lighting>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+        <collision name='collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>model://dropbox/meshes/dropbox.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>1</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose frame=''>-0.002951 -0.729748 0 0 -0 0</pose>
+    </model>
+    <model name='soap'>
+      <link name='soap_link'>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.08</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='soap_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <material>
+            <script>
+              <uri>model://soap/materials/scripts</uri>
+              <uri>model://soap/materials/textures</uri>
+              <name>soap</name>
+            </script>
+          </material>
+          <geometry>
+            <mesh>
+              <uri>model://soap/meshes/soap.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='soap_collision'>
+          <pose frame=''>0.02 0.002 0.05 0 0 -1.05</pose>
+          <geometry>
+            <box>
+              <size>0.14 0.065 0.1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose frame=''>0.422786 -0.00359 0 0 -0 0</pose>
+    </model>
+    <state world_name='default'>
+      <sim_time>774 321000000</sim_time>
+      <real_time>281 268093214</real_time>
+      <wall_time>1544421432 196838981</wall_time>
+      <iterations>280450</iterations>
+      <model name='dropbox'>
+        <pose frame=''>-0.2 -0.7 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link_0'>
+          <pose frame=''>-0.2 -0.7 0 0 0 -1.56873</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='eraser'>
+        <pose frame=''>0.654398 0.039991 0.005 8e-06 1e-06 0</pose>
+        <scale>1 1 1</scale>
+        <link name='eraser_link'>
+          <pose frame=''>0.654398 0.039991 0.005 8e-06 1e-06 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0.000171 0.000256 -0.003876 -0.051288 -0.03415 0</acceleration>
+          <wrench>-1.7e-05 2.6e-05 -0.000388 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='ground_plane'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='robot'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='camera_link'>
+          <pose frame=''>0.6 0 0.8 0 1.57 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='panda_leftfinger'>
+          <pose frame=''>-0.141031 -0.673329 0.516046 -3.14017 -0.032254 -1.76157</pose>
+          <velocity>-0.000732 -0.003218 0.001413 -0.025574 0.004076 0.006725</velocity>
+          <acceleration>-0.732209 -3.21785 1.41302 -2.45737 -0.926921 -0.839589</acceleration>
+          <wrench>-0.073221 -0.321785 0.141302 0 -0 0</wrench>
+        </link>
+        <link name='panda_link0'>
+          <pose frame=''>0 0 1.6e-05 -0.000232 7e-06 -2e-06</pose>
+          <velocity>-0.000121 9e-06 0.000173 -0.153403 0.00102 0.001451</velocity>
+          <acceleration>0.747154 0.021988 1.37695 -2.31846 -1.52864 1.87696</acceleration>
+          <wrench>2.24146 0.065965 4.13086 0 -0 0</wrench>
+        </link>
+        <link name='panda_link1'>
+          <pose frame=''>1e-06 4.1e-05 0.333016 6e-06 -7.2e-05 -1.7193</pose>
+          <velocity>-0.000493 0.019463 0.000316 -0.015616 -0.001429 0.009248</velocity>
+          <acceleration>-0.4934 19.463 0.315644 -3.04997 -1.42814 2.9647</acceleration>
+          <wrench>-1.4802 58.3889 0.946931 0 -0 0</wrench>
+        </link>
+        <link name='panda_link2'>
+          <pose frame=''>1e-06 4e-05 0.333016 -1.5708 0.464837 -1.71929</pose>
+          <velocity>-0.000499 0.018916 0.000463 -0.011972 -0.000211 0.009872</velocity>
+          <acceleration>-0.498982 18.9157 0.46253 2.70682 0.70959 1.92692</acceleration>
+          <wrench>-1.49695 56.747 1.38759 0 -0 0</wrench>
+        </link>
+        <link name='panda_link3'>
+          <pose frame=''>-0.020958 -0.140073 0.615478 4e-05 0.46489 -1.71921</pose>
+          <velocity>0.000371 0.003643 -0.007305 0.039111 -0.009239 0.008979</velocity>
+          <acceleration>0.371245 3.64308 -7.30474 -1.59078 -1.11641 -0.285004</acceleration>
+          <wrench>0.742491 7.28616 -14.6095 0 -0 0</wrench>
+        </link>
+        <link name='panda_link4'>
+          <pose frame=''>-0.031863 -0.213007 0.578493 1.57156 1.52477 -1.71847</pose>
+          <velocity>0.001099 0.004034 -0.007905 -0.003914 -0.002255 0.008815</velocity>
+          <acceleration>1.09916 4.03447 -7.90525 -0.125592 -0.790199 1.39022</acceleration>
+          <wrench>2.19832 8.06894 -15.8105 0 -0 0</wrench>
+        </link>
+        <link name='panda_link5'>
+          <pose frame=''>-0.088033 -0.58863 0.678576 0.001225 1.52476 -1.71799</pose>
+          <velocity>-0.000547 0.001913 -0.001273 -0.025784 0.00244 0.007619</velocity>
+          <acceleration>-0.546778 1.91298 -1.27303 -2.00287 -0.314195 1.46099</acceleration>
+          <wrench>-1.09356 3.82596 -2.54606 0 -0 0</wrench>
+        </link>
+        <link name='panda_link6'>
+          <pose frame=''>-0.088033 -0.588631 0.678576 1.57086 -0.032279 -1.71922</pose>
+          <velocity>-0.000587 0.001614 -0.001106 -0.025164 0.002965 0.007492</velocity>
+          <acceleration>-0.587126 1.61361 -1.10632 -2.24512 0.314786 -1.64475</acceleration>
+          <wrench>-1.17425 3.22722 -2.21264 0 -0 0</wrench>
+        </link>
+        <link name='panda_link7'>
+          <pose frame=''>-0.10104 -0.675618 0.681416 -3.11778 -0.021797 -2.5472</pose>
+          <velocity>-4.3e-05 0.001404 0.00127 -0.025887 0.003677 0.00684</velocity>
+          <acceleration>-0.076265 1.15174 1.27817 -0.780833 -1.11766 -2.39089</acceleration>
+          <wrench>-0.083892 1.26692 1.40599 0 -0 0</wrench>
+        </link>
+        <link name='panda_rightfinger'>
+          <pose frame=''>-0.062641 -0.688464 0.516159 -3.14017 -0.032254 -1.76157</pose>
+          <velocity>-0.000639 -0.002736 0.00149 -0.026282 0.004069 0.006337</velocity>
+          <acceleration>-0.639333 -2.73616 1.49011 -3.02502 0.246321 -1.26605</acceleration>
+          <wrench>-0.063933 -0.273616 0.149011 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='soap'>
+        <pose frame=''>0.422786 -0.00359 0 1e-06 -2e-06 -0.7</pose>
+        <scale>1 1 1</scale>
+        <link name='soap_link'>
+          <pose frame=''>0.422786 -0.00359 0 1e-06 -2e-06 -0.7</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0.047494 -0.058644 0.021957 0</acceleration>
+          <wrench>0 0 0.0038 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='soap2'>
+        <pose frame=''>0.842294 -0.201621 0.0025 1e-06 -1e-06 0</pose>
+        <scale>1 1 1</scale>
+        <link name='soap2_link'>
+          <pose frame=''>0.842294 -0.201621 0.0025 1e-06 -1e-06 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>2e-06 6.5e-05 -0.000862 -0.025975 0.000995 0</acceleration>
+          <wrench>0 5e-06 -6.9e-05 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='sticky_notes'>
+        <pose frame=''>0.550855 -0.23884 0 2e-06 -1e-06 -0</pose>
+        <scale>1 1 1</scale>
+        <link name='sticky_notes_link'>
+          <pose frame=''>0.550855 -0.23884 0 2e-06 -1e-06 -0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 -0.000955 -0.027361 -0.00045 0</acceleration>
+          <wrench>0 0 -7.6e-05 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose frame=''>0 0 10 0 -0 0</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>0.053103 0.021271 3.60127 -0.033745 1.55956 3.10733</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+    <model name='eraser'>
+      <link name='eraser_link'>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='eraser_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <material>
+            <script>
+              <uri>model://eraser/materials/scripts</uri>
+              <uri>model://eraser/materials/textures</uri>
+              <name>eraser</name>
+            </script>
+          </material>
+          <geometry>
+            <mesh>
+              <uri>model://eraser/meshes/eraser.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='eraser_collision'>
+          <pose frame=''>0.02 0.02 0.02 0 0 -0.95</pose>
+          <geometry>
+            <box>
+              <size>0.135 0.06 0.05</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose frame=''>0.654398 0.039991 0 0 -0 0</pose>
+    </model>
+    <model name='sticky_notes'>
+      <link name='sticky_notes_link'>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.08</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='sticky_notes_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <material>
+            <script>
+              <uri>model://sticky_notes/materials/scripts</uri>
+              <uri>model://sticky_notes/materials/textures</uri>
+              <name>sticky_notes</name>
+            </script>
+          </material>
+          <geometry>
+            <mesh>
+              <uri>model://sticky_notes/meshes/sticky_notes.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='sticky_notes_collision'>
+          <pose frame=''>0 0 0.06 0 -0 0.68</pose>
+          <geometry>
+            <box>
+              <size>0.043 0.055 0.12</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose frame=''>0.550855 -0.23884 0 0 -0 0</pose>
+    </model>
+    <model name='soap2'>
+      <link name='soap2_link'>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.08</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='soap2_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <material>
+            <script>
+              <uri>model://soap2/materials/scripts</uri>
+              <uri>model://soap2/materials/textures</uri>
+              <name>soap2</name>
+            </script>
+          </material>
+          <geometry>
+            <mesh>
+              <uri>model://soap2/meshes/soap2.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='soap2_collision'>
+          <pose frame=''>-0.002 0.00502 0.05 0 0 -1</pose>
+          <geometry>
+            <box>
+              <size>0.065 0.04 0.105</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose frame=''>0.842294 -0.201621 0 0 -0 0</pose>
+    </model>
+  </world>
+</sdf>

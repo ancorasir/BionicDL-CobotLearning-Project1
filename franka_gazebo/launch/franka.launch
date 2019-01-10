@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- send franka urdf to param server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find franka_description)/robots/panda_arm_hand_simulation.urdf.xacro'" />
+
+  <!--Publish robot state to TF-->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" type="string" value="" />
+  </node>
+
+  <!-- load joint_state_controller in gazebo -->
+  <rosparam file="$(find franka_gazebo)/controller/joint_state_controller.yaml" command="load"/>
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" args="joint_state_controller" respawn="false" output="screen"/>
+
+  <!-- spawner controllers -->
+  <rosparam file="$(find franka_gazebo)/controller/controller_franka.yaml" command="load"/>
+  <node name="arm_controller_spawner" pkg="controller_manager" type="spawner" args="arm_controller gripper_controller" respawn="false" output="screen"/>
+
+  <!-- Moved to panda_moveit_config/launch/panda_moveit.launch -->
+  <include file="$(find panda_moveit_config)/launch/move_group.launch"/>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- <arg name="world_name" default="worlds/empty.world"/> -->
+    <arg name="world_name" value="$(find franka_description)/worlds/simple_geometry.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+  </include>
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -param robot_description -model robot
+     -z 0.0
+     -J panda_joint6 0.5"/>
+
+  <!-- Remap follow_joint_trajectory -->
+  <!-- <remap if="true" from="/follow_joint_trajectory" to="/arm_controller/follow_joint_trajectory"/> -->
+
+  <node name="franka_pick_place_server" pkg="franka_description" type="franka_pick_place_server"
+    respawn="false" output="screen"/>
+
+  <!--launch rviz-->
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false"
+    output="screen" args="-d $(find panda_moveit_config)/launch/panda.rviz"/>
+
+
+</launch>

@@ -1,0 +1,6 @@
+# request
+std_msgs/String object_name
+geometry_msgs/Pose pick_pose
+---
+# response
+bool success

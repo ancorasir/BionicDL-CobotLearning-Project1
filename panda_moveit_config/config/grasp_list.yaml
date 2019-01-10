@@ -1,0 +1,61 @@
+grasp_list:
+  - cylinder_b:
+        position:
+          x: 0.5
+          y: -0.2
+          z: 0.0
+        orientation:
+          x: 0.5
+          y: 0.5
+          z: -0.5
+          w: 0.5
+    cylinder_g:
+        position:
+          x: 0.65
+          y: -0.2
+          z: 0.0
+        orientation:
+          x: 0.5
+          y: 0.5
+          z: -0.5
+          w: 0.5
+    cube_b:
+        position:
+          x: 0.5
+          y: 0.0
+          z: 0.0
+        orientation:
+          x: 0.5
+          y: 0.5
+          z: -0.5
+          w: 0.5
+    cube_g:
+        position:
+          x: 0.65
+          y: 0.0
+          z: 0.0
+        orientation:
+          x: 0.5
+          y: 0.5
+          z: -0.5
+          w: 0.5
+    sphere_b:
+        position:
+          x: 0.5
+          y: -0.2
+          z: 0.0
+        orientation:
+          x: 0.5
+          y: 0.5
+          z: -0.5
+          w: 0.5
+    sphere_g:
+        position:
+          x: 0.65
+          y: -0.2
+          z: 0.0
+        orientation:
+          x: 0.5
+          y: 0.5
+          z: -0.5
+          w: 0.5

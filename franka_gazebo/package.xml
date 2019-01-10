@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package>
+  <name>franka_gazebo</name>
+  <version>0.0.1</version>
+  <description>
+      Gazebo wrapper for the Franka Emika arms.
+  </description>
+
+
+  <author>Fang Wan</author>
+  <author email="sophie.fwan@hotmail.com">Fang Wan</author>
+  <maintainer email="sophie.fwan@hotmail.com">Fang Wanr</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/ur_gazebo</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <test_depend>roslaunch</test_depend>
+  <run_depend>franka_description</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_ros_control</run_depend>
+  <run_depend>joint_state_controller</run_depend>
+  <run_depend>joint_trajectory_controller</run_depend>
+  <run_depend>effort_controllers</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>rostopic</run_depend>
+  <run_depend>controller_manager</run_depend>
+
+
+  <export>
+  </export>
+</package>
