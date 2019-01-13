@@ -49,7 +49,7 @@ FRANKAPickPlace::FRANKAPickPlace(ros::NodeHandle nh)
   // Define pose for the objects (specified relative to base_footprint)
   geometry_msgs::Pose mesh_pose;
 
-  mesh_pose.position.x = -0.2;
+  mesh_pose.position.x = -0.0;
   mesh_pose.position.y = -0.70;
   mesh_pose.position.z = 0;
   mesh_pose.orientation.w = 0.707;
@@ -126,6 +126,8 @@ bool FRANKAPickPlace::Routine(franka_description::PickPlace::Request &req,
     // set target pose
     if(1)
     {
+      //Go to the 0.2m above the picking object
+      grasp_pose.position.z = grasp_pose.position.z + 0.2;
       move_group.setPoseTarget(grasp_pose);
 
       success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
@@ -143,7 +145,7 @@ bool FRANKAPickPlace::Routine(franka_description::PickPlace::Request &req,
 
       //Reach movement
       move_group.setStartStateToCurrentState();
-      grasp_pose.position.z = grasp_pose.position.z - 0.08;
+      grasp_pose.position.z = grasp_pose.position.z - 0.2;
       move_group.setPoseTarget(grasp_pose);
       success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
       ROS_INFO("Visualizing plan to target: %s",
@@ -168,7 +170,7 @@ bool FRANKAPickPlace::Routine(franka_description::PickPlace::Request &req,
 
       //Reach movement
       move_group.setStartStateToCurrentState();
-      grasp_pose.position.z = grasp_pose.position.z+0.14;
+      grasp_pose.position.z = grasp_pose.position.z + 0.2;
       move_group.setPoseTarget(grasp_pose);
       success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
       ROS_INFO("Visualizing plan to target: %s",

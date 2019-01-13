@@ -7,47 +7,6 @@
     </plugin>
   </gazebo>
 
-  <!--RGBD camera -->
-  <gazebo reference="camera_rgb_frame">
-   <sensor type="depth" name="camera">
-     <always_on>true</always_on>
-     <visualize>false</visualize>
-     <update_rate>15.0</update_rate>
-     <camera name="front">
-       <horizontal_fov>1.5</horizontal_fov><!--default=1.047197-->
-       <image>
-         <!-- openni_kinect plugin works only with BGR8 -->
-         <format>B8G8R8</format>
-         <width>1024</width>
-         <height>576</height>
-       </image>
-       <clip>
-         <near>0.01</near>
-         <far>9</far>
-       </clip>
-     </camera>
-     <plugin name="camera_controller" filename="libgazebo_ros_openni_kinect.so">
-       <baseline>0.1</baseline>
-       <alwaysOn>true</alwaysOn>
-       <updateRate>60.0</updateRate>
-       <cameraName>camera</cameraName>
-       <imageTopicName>/camera/rgb/image_raw</imageTopicName>
-       <cameraInfoTopicName>/camera/rgb/camera_info</cameraInfoTopicName>
-       <depthImageTopicName>/camera/depth_registered/image_raw</depthImageTopicName>
-       <depthImageCameraInfoTopicName>/camera/depth_registered/camera_info</depthImageCameraInfoTopicName>
-       <pointCloudTopicName>/camera/depth_registered/points</pointCloudTopicName>
-       <frameName>camera_rgb_optical_frame</frameName>
-       <pointCloudCutoff>0.5</pointCloudCutoff>
-       <pointCloudCutoffMax>4.5</pointCloudCutoffMax>
-       <CxPrime>0</CxPrime>
-       <Cx>0</Cx>
-       <Cy>0</Cy>
-       <focalLength>0</focalLength>
-       <hackBaseline>0</hackBaseline>
-     </plugin>
-   </sensor>
-  </gazebo>
-
   <!-- grasp plugin -->
   <gazebo>
     <plugin name="gazebo_grasp_fix" filename="libgazebo_grasp_fix.so">

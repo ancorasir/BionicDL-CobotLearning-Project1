@@ -18,7 +18,6 @@
   <xacro:include filename="$(find franka_description)/robots/panda.gazebo.xacro" />
   <xacro:include filename="$(find franka_description)/robots/panda_arm.xacro"/>
   <xacro:include filename="$(find franka_description)/robots/hand.xacro"/>
-  <xacro:include filename="$(find franka_description)/robots/sensor.urdf.xacro" />
 
   <link name="world" />
 
@@ -29,5 +28,6 @@
 
   <!-- Disable gravity of gripper -->
   <xacro:panda_gripper_gazebo />
+
 
 </robot>

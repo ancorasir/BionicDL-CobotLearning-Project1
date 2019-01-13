@@ -60,12 +60,6 @@ private:
     "package://franka_description/models/dropbox/meshes/dropbox.dae";
 
   std::vector<std::string> OBJECT_MESH_PATH_LIST;
-  const std::string OBJECT_1_MESH_PATH =
-    "package://franka_description/models/biscuits/meshes/biscuits.dae";
-  const std::string OBJECT_2_MESH_PATH =
-    "package://franka_description/models/soap/meshes/soap.dae";
-  const std::string OBJECT_3_MESH_PATH =
-    "package://franka_description/models/soap2/meshes/soap2.dae";
   const std::string OBJECT_MESH_PATH =
     "package://franka_description/models/";
 

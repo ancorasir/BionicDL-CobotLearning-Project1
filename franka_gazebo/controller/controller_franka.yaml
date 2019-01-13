@@ -31,8 +31,8 @@ gripper_controller:
     panda_finger_joint1: {p: 100, i: 1, d: 10, i_clamp: 1.0}
     panda_finger_joint2: {p: 100, i: 1, d: 10, i_clamp: 1.0}
   constraints:
-    goal_time: 3.0
+    goal_time: 4.0
     panda_finger_joint1:
-      goal: 0.02
+      goal: 0.03
     panda_finger_joint2:
-      goal: 0.02
+      goal: 0.03

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
+  <rosparam command="load" file="$(find panda_moveit_config)/config/grasp_list.yaml"/>
+
   <!-- send franka urdf to param server -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find franka_description)/robots/panda_arm_hand_simulation.urdf.xacro'" />
 
