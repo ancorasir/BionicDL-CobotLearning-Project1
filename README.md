@@ -1,14 +1,54 @@
 # ROS integration for Franka Emika research robots
 
-[![Build Status][travis-status]][travis]
+# BionicDL-CobotLearning-Project1
+In this project, you must assimilate your work from previous exercises to successfully complete a tabletop pick and place operation using Franka in Gazebo.
 
-See the [Franka Control Interface (FCI) documentation][fci-docs] for more information.
+The system is without perception and the pick list is given.
 
-## License
+# Project Setup
+For this setup, catkin_ws is the name of active ROS Workspace, if your workspace name is different, change the commands accordingly
+If you do not have an active ROS workspace, you can create one by:
+```sh
+$ mkdir -p ~/catkin_ws/src
+$ cd ~/catkin_ws/
+$ catkin_make
+```
 
-All packages of `franka_ros` are licensed under the [Apache 2.0 license][apache-2.0].
+Now that you have a workspace, clone or download this repo into the src directory of your workspace:
+```sh
+$ cd ~/catkin_ws/src
+$ git clone https://github.com/ancorasir/BionicDL-CobotLearning-Project1.git
+```
 
-[apache-2.0]: https://www.apache.org/licenses/LICENSE-2.0.html
-[fci-docs]: https://frankaemika.github.io/docs
-[travis-status]: https://travis-ci.org/frankaemika/franka_ros.svg?branch=kinetic-devel
-[travis]: https://travis-ci.org/frankaemika/franka_ros
+Now install missing dependencies using rosdep install:
+```sh
+$ cd ~/catkin_ws
+$ rosdep install --from-paths src --ignore-src --rosdistro=kinetic -y
+```
+
+Build the project:
+```sh
+$ cd ~/catkin_ws
+$ catkin build
+```
+
+Add following to your .bashrc file
+```sh
+export GAZEBO_MODEL_PATH=~/catkin_ws/src/BionicDL-CobotLearning-Project1/franka_description/models:$GAZEBO_MODEL_PATH
+```
+
+If you haven’t already, following line can be added to your .bashrc to auto-source all new terminals
+```sh
+source ~/catkin_ws/devel/setup.bash
+```
+
+# Run the demo:
+```sh
+roslaunch franka_gazebo franka.launch
+```
+
+![alt text](./images/easy_handeye.png)
+
+
+# Some notes
+1. The calibration result is not very good as show in Rviz. The aruco marker is actually lay on the table horizontally. The orientation of the handeye transformation is bad. The calibration result is good only in the center of the camera's view, which is commonly seen in practice.
