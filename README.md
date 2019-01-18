@@ -1,5 +1,3 @@
-# ROS integration for Franka Emika research robots
-
 # BionicDL-CobotLearning-Project1
 In this project, you must assimilate your work from previous exercises to successfully complete a tabletop pick and place operation using Franka in Gazebo.
 
@@ -65,4 +63,4 @@ You should see the franka starts to picking items and place them in the bin as s
 ![alt text](./images/placing.png)
 You can also see the planning path of the arm in Rviz.
 ![alt text](./images/planning_Rviz.png)
-You can exit the ros grogram by ctrl+c.
+You can exit the ros grogram by ctrl+c at anytime.
