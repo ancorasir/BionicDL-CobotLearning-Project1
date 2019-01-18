@@ -29,5 +29,27 @@
   <!-- Disable gravity of gripper -->
   <xacro:panda_gripper_gazebo />
 
+  <!-- add floor to avoid collision in moveit planning-->
+  <!-- <link name="wall">
+    <visual>
+      <geometry>
+        <box size="2 2 0.01"/>
+      </geometry>
+      <material name="gray"/>
+      <origin xyz="0 0 0.005" rpy="0 -0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="2 2 0.01"/>
+      </geometry>
+    </collision>
+    <xacro:default_inertial mass="1"/>
+  </link>
+  <joint name="world_wall_joint" type="fixed">
+    <parent link="world" />
+    <child link = "wall" />
+    <origin xyz="-0.0 0.0 -0.05" rpy="0.0 0.0 0.0" />
+  </joint> -->
+
 
 </robot>

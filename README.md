@@ -43,12 +43,26 @@ source ~/catkin_ws/devel/setup.bash
 ```
 
 # Run the demo:
+0. Before running the demo, you mignht want to launch gazebo to see the grasping scene and check if you have the path set correctly for gazebo models.
+```sh
+roslaunch franka_gazebo test_world.launch
+```
+![alt text](./images/grasping_scene.png)
+
+1. Launch the grasping scene with franka. You will see the following in Gazebo.
 ```sh
 roslaunch franka_gazebo franka.launch
 ```
+![alt text](./images/grasping_scene_franka.png)
 
-![alt text](./images/easy_handeye.png)
+2. Run the grasping script.
+```sh
+rosrun franka_description project_grasp.py
+```
 
-
-# Some notes
-1. The calibration result is not very good as show in Rviz. The aruco marker is actually lay on the table horizontally. The orientation of the handeye transformation is bad. The calibration result is good only in the center of the camera's view, which is commonly seen in practice.
+You should see the franka starts to picking items and place them in the bin as shown below in gazebo.
+![alt text](./images/picking.png)
+![alt text](./images/placing.png)
+You can also see the planning path of the arm in Rviz.
+![alt text](./images/planning_Rviz.png)
+You can exit the ros grogram by ctrl+c.
