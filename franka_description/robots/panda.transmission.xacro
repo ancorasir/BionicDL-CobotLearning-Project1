@@ -73,8 +73,6 @@
       </actuator>
     </transmission>
 
-
-
   </xacro:macro>
 
 </robot>

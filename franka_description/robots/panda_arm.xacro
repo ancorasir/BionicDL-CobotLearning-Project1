@@ -12,7 +12,6 @@
   <xacro:property name="link5_mass" value="2.0" />
   <xacro:property name="link6_mass" value="2.0" />
   <xacro:property name="link7_mass" value="1.0" />
-
   <xacro:property name="link0_length" value="0.133" />
   <xacro:property name="link1_length" value="0.200" />
   <xacro:property name="link2_length" value="0.316" />
@@ -21,7 +20,6 @@
   <xacro:property name="link5_length" value="0.384" />
   <xacro:property name="link6_length" value="0.10" />
   <xacro:property name="link7_length" value="0.10" />
-
 
   <xacro:macro name="cylinder_inertial" params="radius length mass *origin">
     <inertial>
