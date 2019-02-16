@@ -7,16 +7,6 @@ import tf
 from geometry_msgs.msg import Pose
 from std_msgs.msg import String
 from franka_description.srv import *
-from rospy_message_converter import message_converter
-import time
-
-#height: 576
-#width: 1024
-#distortion_model: plumb_bob
-#K: [549.5941880572811, 0.0, 512.5, 0.0, 549.5941880572811, 288.5, 0.0, 0.0, 1.0]
-# gqcnn 640*480
-def callback(depth, rgb, camera_info):
-    pass
 
 # function to load parameters and request PickPlace service
 def franka_mover():
@@ -29,7 +19,7 @@ def franka_mover():
         pick_pose = Pose()
         pick_pose.position.x = grasp_list[obj]['position']['x']
         pick_pose.position.y = grasp_list[obj]['position']['y']
-        pick_pose.position.z = grasp_list[obj]['position']['z'] + 0.13  #+ offset for gripper from contact point to +
+        pick_pose.position.z = grasp_list[obj]['position']['z'] + 0.13  #+ offset for gripper from contact point
         pick_pose.orientation.x = grasp_list[obj]['orientation']['x']
         pick_pose.orientation.y = grasp_list[obj]['orientation']['y']
         pick_pose.orientation.z = grasp_list[obj]['orientation']['z']
