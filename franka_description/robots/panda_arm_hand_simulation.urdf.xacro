@@ -14,42 +14,21 @@
     </inertial>
   </xacro:macro>
 
-  <!-- common stuff -->
+  <!-- incluude common stuff -->
   <xacro:include filename="$(find franka_description)/robots/panda.gazebo.xacro" />
   <xacro:include filename="$(find franka_description)/robots/panda_arm.xacro"/>
   <xacro:include filename="$(find franka_description)/robots/hand.xacro"/>
 
+  <!-- TODO: create world link -->
   <link name="world" />
 
-  <!-- Franka arm and hand -->
-  <!-- change hand's parent link to panda_link_7 and change the joint position xyz in hand.xacro -->
+  <!-- TODO: Franka arm -->
   <xacro:panda_arm connected_to="world"/>
-  <xacro:hand ns="panda" rpy="0 0 ${-pi/4}" connected_to="panda_link7"/>
+
+  <!-- TODO: Franka hand -->
+  <xacro:hand ns="panda" rpy="0 0 ${-pi/4}" connected_to="panda_link8"/>
 
   <!-- Disable gravity of gripper -->
   <xacro:panda_gripper_gazebo />
-
-  <!-- add floor to avoid collision in moveit planning-->
-  <!-- <link name="wall">
-    <visual>
-      <geometry>
-        <box size="2 2 0.01"/>
-      </geometry>
-      <material name="gray"/>
-      <origin xyz="0 0 0.005" rpy="0 -0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="2 2 0.01"/>
-      </geometry>
-    </collision>
-    <xacro:default_inertial mass="1"/>
-  </link>
-  <joint name="world_wall_joint" type="fixed">
-    <parent link="world" />
-    <child link = "wall" />
-    <origin xyz="-0.0 0.0 -0.05" rpy="0.0 0.0 0.0" />
-  </joint> -->
-
 
 </robot>

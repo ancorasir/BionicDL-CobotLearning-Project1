@@ -4,7 +4,7 @@
   <xacro:property name="finger_mass" value="0.1" />
   <xacro:property name="gripper_mass"  value= "0.1" />
 
-  <xacro:macro name="hand" params="connected_to:='' ns:='' rpy:='0 0 0' xyz:='0 0 0.107' ">
+  <xacro:macro name="hand" params="connected_to:='' ns:='' rpy:='0 0 0' xyz:='0 0 0' ">
 
     <link name="${ns}_hand">
       <visual>
