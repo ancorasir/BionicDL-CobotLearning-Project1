@@ -58,10 +58,10 @@ roslaunch franka_gazebo test_world.launch
 
 2. Create a panda_moveit_config package using  MoveIt! Setup Assistant (http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/setup_assistant/setup_assistant_tutorial.html):
 
-   2.1 create two moveit groups "panda_arm" (from panda_link0 to panda_link9) and "panda_gripper", use RRTConenct as default planner. Group "panda_gripper" does not need inverse kinematics.
+   * Create two moveit groups "panda_arm" (from panda_link0 to panda_link9) and "panda_gripper", use RRTConenct as default planner. Group "panda_gripper" does not need inverse kinematics.
 ![alt text](./images/moveit_group.png)
 
-Add a place pose for franka arm:
+   * Add a place pose for franka arm:
 ```sh
 <group_state name="place_pose" group="panda_arm">
     <joint name="panda_joint1" value="-1.7193" />
@@ -75,7 +75,7 @@ Add a place pose for franka arm:
 ```
 ![alt text](./images/moveit_pose.png)
 
-After generated the panda_moveit_config package, edit panda_moveit_config/config/ros_controllers.yaml:
+   * After generated the panda_moveit_config package, edit panda_moveit_config/config/ros_controllers.yaml:
 ```sh
 controller_list:
  - name: "arm_controller"
@@ -99,7 +99,7 @@ controller_list:
      - panda_finger_joint2
 ```
 
-Edit panda_moveit_config/launch/panda_moveit_controller_manager.launch.xml and add the following lines in the file:
+   * Edit panda_moveit_config/launch/panda_moveit_controller_manager.launch.xml and add the following lines in the file:
 ```sh
 <launch>
   <!-- Set the param that trajectory_execution_manager needs to find the controller plugin -->
