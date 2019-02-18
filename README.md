@@ -57,10 +57,12 @@ roslaunch franka_gazebo test_world.launch
 1. Finish the robot and arm urdf in BionicDL-CobotLearning-Project1/franka_description/robots/panda_arm_hand_simulation.urdf.xacro
 
 2. Create a panda_moveit_config package using  MoveIt! Setup Assistant (http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/setup_assistant/setup_assistant_tutorial.html):
+
 create two moveit groups "panda_arm" (from panda_link0 to panda_link9) and "panda_gripper", use RRTConenct as default planner. Group "panda_gripper" does not need inverse kinematics.
 ![alt text](./images/moveit_group.png)
 
 Add a place pose for franka arm:
+```sh
 <group_state name="place_pose" group="panda_arm">
     <joint name="panda_joint1" value="-1.7193" />
     <joint name="panda_joint2" value="0.465" />
@@ -70,9 +72,11 @@ Add a place pose for franka arm:
     <joint name="panda_joint6" value="1.557" />
     <joint name="panda_joint7" value="0.8278" />
 </group_state>
+```
 ![alt text](./images/moveit_pose.png)
 
 After generated the panda_moveit_config package, edit panda_moveit_config/config/ros_controllers.yaml:
+```sh
 controller_list:
  - name: "arm_controller"
    action_ns: follow_joint_trajectory
@@ -93,8 +97,10 @@ controller_list:
    joints:
      - panda_finger_joint1
      - panda_finger_joint2
+```
 
 Edit panda_moveit_config/launch/panda_moveit_controller_manager.launch.xml and add the following lines in the file:
+```sh
 <launch>
   <!-- Set the param that trajectory_execution_manager needs to find the controller plugin -->
   <arg name="moveit_controller_manager" default="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
@@ -102,7 +108,7 @@ Edit panda_moveit_config/launch/panda_moveit_controller_manager.launch.xml and a
   <!-- load controller_list -->
   <rosparam file="$(find panda_moveit_config)/config/ros_controllers.yaml"/>
 </launch>
-
+```
 
 3. Launch the grasping scene with franka. You will see the following in Gazebo. There might be errors saying "[ERROR] [1550415769.179998310, 1237.944000000]: Controller is taking too long to execute trajectory (the expected upper bound for the trajectory execution was ** seconds). Stopping trajectory.". You can ignore the error or edit panda_moveit_config/launch/trajectory_execution.launch.xml file to change the value of parameter "allowed_execution_duration_scaling" to 5.
 ```sh
