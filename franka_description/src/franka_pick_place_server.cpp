@@ -1,13 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2017 Udacity Inc.
  *
- * This file is part of Robotic Arm: Perception project for Udacity
- * Robotics nano-degree program
+ * This file is part of cobot learning project1
  *
- * All Rights Reserved.
  ******************************************************************************/
 
-// Author: Harsh Pandya
+// Author: WAN FANG
 
 #include <franka_description/franka_pick_place_server.h>
 
@@ -81,7 +78,6 @@ bool FRANKAPickPlace::Routine(franka_description::PickPlace::Request &req,
                     franka_description::PickPlace::Response &res)
 {
 
-  // test
   visual_tools_ptr->deleteAllMarkers();
 
   // Create text marker for displaying current state
@@ -93,122 +89,96 @@ bool FRANKAPickPlace::Routine(franka_description::PickPlace::Request &req,
 
   //Is pick_pose close to actual object pose
   gazebo_msgs::GetModelState srv;
-  geometry_msgs::Pose act_obj_pose, place_pose, grasp_pose;
+  geometry_msgs::Pose place_pose, grasp_pose;
 
   grasp_pose = req.pick_pose;
 
   srv.request.model_name = req.object_name.data;
   srv.request.relative_entity_name = "world";
 
-  //if(!success)
-  if(1)
-  {
-    // Pick Pose is within limits, next spawn the collision object
-    geometry_msgs::Pose target_mesh_pose;
-    std::vector<moveit_msgs::CollisionObject> target_object_list;
-    std::vector<std::string> object_ids;
-    moveit_msgs::CollisionObject target_collision_object;
+  // Pick Pose is within limits, next spawn the collision object
+  geometry_msgs::Pose target_mesh_pose;
+  std::vector<moveit_msgs::CollisionObject> target_object_list;
+  std::vector<std::string> object_ids;
 
-    std::string TARGET_MESH_PATH = OBJECT_MESH_PATH + req.object_name.data + "/meshes/" + req.object_name.data + ".dae";
+  // Plan arm motion
+  // set starting pose
+  move_group.setStartStateToCurrentState();
 
-    SetupCollisionObject(req.object_name.data, TARGET_MESH_PATH, act_obj_pose, target_collision_object);
+  // set target pose
+  //Go to the 0.2m above the picking object
+  grasp_pose.position.z = grasp_pose.position.z + 0.2;
+  move_group.setPoseTarget(grasp_pose);
 
-    target_object_list.push_back(target_collision_object);
-    // Add the object list to the world scene
-    planning_scene_interface.addCollisionObjects(target_object_list);
-    ROS_INFO("Added Target to the world");
-    ros::Duration(1.0).sleep();
+  success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  ROS_INFO("Visualizing plan to target: %s",
+           success ? "SUCCEEDED" : "FAILED");
 
-    // Plan arm motion
-    // set starting pose
-    move_group.setStartStateToCurrentState();
+  // We can also visualize the plan as a line with markers in Rviz.
+  ROS_INFO("Visualizing plan 1 as trajectory line");
+  visual_tools_ptr->publishAxisLabeled(grasp_pose, "reach_pose");
+  visual_tools_ptr->publishText(text_pose, "Reach Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
+  visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
+  visual_tools_ptr->trigger();
 
-    // set target pose
-    if(1)
-    {
-      //Go to the 0.2m above the picking object
-      grasp_pose.position.z = grasp_pose.position.z + 0.2;
-      move_group.setPoseTarget(grasp_pose);
+  move_group.execute(arm_plan);
 
-      success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-      ROS_INFO("Visualizing plan to target: %s",
-               success ? "SUCCEEDED" : "FAILED");
+  //Reach movement
+  move_group.setStartStateToCurrentState();
+  grasp_pose.position.z = grasp_pose.position.z - 0.2;
+  move_group.setPoseTarget(grasp_pose);
+  success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  ROS_INFO("Visualizing plan to target: %s",
+           success ? "SUCCEEDED" : "FAILED");
 
-      // We can also visualize the plan as a line with markers in Rviz.
-      ROS_INFO("Visualizing plan 1 as trajectory line");
-      visual_tools_ptr->publishAxisLabeled(grasp_pose, "reach_pose");
-      visual_tools_ptr->publishText(text_pose, "Reach Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
-      visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
-      visual_tools_ptr->trigger();
+  // We can also visualize the plan as a line with markers in Rviz.
+  visual_tools_ptr->deleteAllMarkers();
+  visual_tools_ptr->publishAxisLabeled(grasp_pose, "pick_pose");
+  visual_tools_ptr->publishText(text_pose, "Pick Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
+  visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
+  visual_tools_ptr->trigger();
 
-      move_group.execute(arm_plan);
+  move_group.execute(arm_plan);
 
-      //Reach movement
-      move_group.setStartStateToCurrentState();
-      grasp_pose.position.z = grasp_pose.position.z - 0.2;
-      move_group.setPoseTarget(grasp_pose);
-      success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-      ROS_INFO("Visualizing plan to target: %s",
-               success ? "SUCCEEDED" : "FAILED");
+  object_ids.push_back(req.object_name.data);
 
-      // We can also visualize the plan as a line with markers in Rviz.
-      visual_tools_ptr->deleteAllMarkers();
-      visual_tools_ptr->publishAxisLabeled(grasp_pose, "pick_pose");
-      visual_tools_ptr->publishText(text_pose, "Pick Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
-      visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
-      visual_tools_ptr->trigger();
+  //Close Gripper
+  OperateGripper(true);
+  ros::Duration(3.0).sleep();
 
-      move_group.execute(arm_plan);
+  //Reach movement
+  move_group.setStartStateToCurrentState();
+  grasp_pose.position.z = grasp_pose.position.z + 0.2;
+  move_group.setPoseTarget(grasp_pose);
+  success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  ROS_INFO("Visualizing plan to target: %s",
+           success ? "SUCCEEDED" : "FAILED");
+  // visualize the plan in Rviz.
+  visual_tools_ptr->deleteAllMarkers();
+  visual_tools_ptr->publishAxisLabeled(grasp_pose, "reach_pose");
+  visual_tools_ptr->publishText(text_pose, "Reach Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
+  visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
+  visual_tools_ptr->trigger();
 
-      //Remove object from the scene
-      object_ids.push_back(req.object_name.data);
-      planning_scene_interface.removeCollisionObjects(object_ids);
+  move_group.execute(arm_plan);
 
-      //Close Gripper
-      OperateGripper(true);
-      ros::Duration(3.0).sleep();
+  //drop the ball
+  move_group.setStartStateToCurrentState();
+  move_group.setNamedTarget("place_pose");
+  success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  ROS_INFO("Visualizing plan to target: %s",
+           success ? "SUCCEEDED" : "FAILED");
 
-      //Reach movement
-      move_group.setStartStateToCurrentState();
-      grasp_pose.position.z = grasp_pose.position.z + 0.2;
-      move_group.setPoseTarget(grasp_pose);
-      success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-      ROS_INFO("Visualizing plan to target: %s",
-               success ? "SUCCEEDED" : "FAILED");
-      // visualize the plan in Rviz.
-      visual_tools_ptr->deleteAllMarkers();
-      visual_tools_ptr->publishAxisLabeled(grasp_pose, "reach_pose");
-      visual_tools_ptr->publishText(text_pose, "Reach Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
-      visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
-      visual_tools_ptr->trigger();
+  visual_tools_ptr->publishText(text_pose, "Drop Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
+  visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
+  visual_tools_ptr->trigger();
+  move_group.execute(arm_plan);
 
-      move_group.execute(arm_plan);
+  //Open Gripper
+  OperateGripper(false);
+  ros::Duration(5.0).sleep();
 
-      //drop the ball
-      move_group.setStartStateToCurrentState();
-
-      move_group.setNamedTarget("place_pose");
-      success = move_group.plan(arm_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-      ROS_INFO("Visualizing plan to target: %s",
-               success ? "SUCCEEDED" : "FAILED");
-
-      visual_tools_ptr->publishText(text_pose, "Drop Pose", rviz_visual_tools::WHITE, rviz_visual_tools::XLARGE);
-      visual_tools_ptr->publishTrajectoryLine(arm_plan.trajectory_, joint_model_group);
-      visual_tools_ptr->trigger();
-      move_group.execute(arm_plan);
-
-
-      //Open Gripper
-      OperateGripper(false);
-      ros::Duration(5.0).sleep();
-
-      //Raise arms
-      // move_group.setNamedTarget("PLACE_POSE");
-      // success = move_group.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-    }
-
-    res.success = true;
-  }
+  res.success = true;
 }
 
 

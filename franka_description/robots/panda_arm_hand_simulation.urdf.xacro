@@ -14,19 +14,16 @@
     </inertial>
   </xacro:macro>
 
-  <!-- incluude common stuff -->
+  <!-- include gazebo -->
   <xacro:include filename="$(find franka_description)/robots/panda.gazebo.xacro" />
-  <xacro:include filename="$(find franka_description)/robots/panda_arm.xacro"/>
-  <xacro:include filename="$(find franka_description)/robots/hand.xacro"/>
+
+  <!-- TODO: include xacro files for franka arm and hand -->
 
   <!-- TODO: create world link -->
-  <link name="world" />
 
   <!-- TODO: Franka arm -->
-  <xacro:panda_arm connected_to="world"/>
 
   <!-- TODO: Franka hand -->
-  <xacro:hand ns="panda" rpy="0 0 ${-pi/4}" connected_to="panda_link8"/>
 
   <!-- Disable gravity of gripper -->
   <xacro:panda_gripper_gazebo />

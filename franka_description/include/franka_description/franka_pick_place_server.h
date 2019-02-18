@@ -1,13 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2017 Udacity Inc.
  *
- * This file is part of Robotic Arm: Perception project for Udacity
- * Robotics nano-degree program
+ * This file is part of cobot learning project1
  *
- * All Rights Reserved.
  ******************************************************************************/
 
-// Author: Harsh Pandya
+// Author: WAN FANG
 
 #ifndef FRANKA_PICK_PLACE_SERVER_H
 #define FRANKA_PICK_PLACE_SERVER_H
