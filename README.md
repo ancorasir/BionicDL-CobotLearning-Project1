@@ -58,7 +58,7 @@ roslaunch franka_gazebo test_world.launch
 
 2. Create a panda_moveit_config package using  MoveIt! Setup Assistant (http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/setup_assistant/setup_assistant_tutorial.html):
 
-create two moveit groups "panda_arm" (from panda_link0 to panda_link9) and "panda_gripper", use RRTConenct as default planner. Group "panda_gripper" does not need inverse kinematics.
+   2.1 create two moveit groups "panda_arm" (from panda_link0 to panda_link9) and "panda_gripper", use RRTConenct as default planner. Group "panda_gripper" does not need inverse kinematics.
 ![alt text](./images/moveit_group.png)
 
 Add a place pose for franka arm:
